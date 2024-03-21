@@ -225,7 +225,19 @@ async function loadDataForStudent(studentId) {
 			borderWidth: 1
 		}]
 	}
-	const radarDataInt = {
+  const radarDataGer = {
+		labels: ['1 | Operieren und Benennen', '1 | Erforschen und Argumentieren', '1 | Mathematisieren und Darstellen',
+			'2 | Operieren und Benennen', '2 | Erforschen und Argumentieren', '2 | Mathematisieren und Darstellen',
+			'3 | Operieren und Benennen', '3 | Erforschen und Argumentieren', '3 | Mathematisieren und Darstellen'],
+		datasets: [{
+			label: student.name,
+			data: student.data,
+			backgroundColor: 'rgba(54, 162, 235, 0.2)',
+			borderColor: 'rgba(54, 162, 235, 1)',
+			borderWidth: 1
+		}]
+	}
+	const polarDataInt = {
 		labels: ['Selbstreflexion', 'Dialog- und Kooperationsf\u00e4higkeit', 'Sprachf\u00e4higkeit',
 			'Aufgaben/Probleme l\u00f6sen', 'Selbstst\u00e4ndigkeit', 'Eigenst\u00e4ndigkeit',
 			'Konfliktf\u00e4higkeit', 'Informationen nutzen', 'Umgang mit Vielfalt'],
@@ -271,9 +283,25 @@ async function loadDataForStudent(studentId) {
 		}
 	}
 
-	const radarConfigInt = {
+  const radarConfigGer = {
+		type: 'radar',
+		data: radarDataGer,
+		options: {
+			scales: {
+				r: {
+					angleLines: {
+						display: false
+					},
+					suggestedMin: 0,
+					suggestedMax: 100
+				}
+			}
+		}
+	}
+
+	const polarConfigInt = {
 		type: 'polarArea',
-		data: radarDataInt,
+		data: polarDataInt,
 		options: {
 			scales: {
 				r: {
@@ -320,8 +348,11 @@ async function loadDataForStudent(studentId) {
 	const radarChartCtx = document.getElementById('radarChartMath').getContext('2d')
 	const radarChart = new Chart(radarChartCtx, radarConfigMath)
 
-	const radarChartCtx2 = document.getElementById('radarChartInt').getContext('2d')
-	const radarChart2 = new Chart(radarChartCtx2, radarConfigInt)
+  const radarChartCtx2 = document.getElementById('radarChartGer').getContext('2d')
+	const radarChart2 = new Chart(radarChartCtx2, radarConfigGer)
+
+	const polarChartCtx2 = document.getElementById('radarChartInt').getContext('2d')
+	const polarChart2 = new Chart(polarChartCtx2, polarConfigInt)
 
 	// Create Line Chart
 	const lineChartCtx = document.getElementById('lineChart').getContext('2d')
