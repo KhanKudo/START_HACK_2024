@@ -38,6 +38,7 @@ window.addEventListener('load', e => {
 	showWhile(/\/student\/[^\/]+\/$/, document.querySelector('.person-details .chart-container').parentElement)
 	showWhile(/\/student\/[^\/]+\/personal-exams\//, document.getElementById('personal-exams'))
 	showWhile(/\/student\/[^\/]+\/personal-observations\//, document.getElementById('personal-observations'))
+	showWhile(/\/student\/[^\/]+\/personal-objectives\//, document.getElementById('personal-objectives'))
 
 	document.getElementById('personal-student-button').addEventListener('click', () => {
 		if (/\/student\/[^\/]+\/personal-/.test(window.location.search))
@@ -126,6 +127,18 @@ window.addEventListener('load', e => {
 				return div
 			}))
 		})
+	})
+
+	document.getElementById('personal-objectives-button').addEventListener('click', () => {
+		if (/\/student\/[^\/]+\/personal-/.test(window.location.search))
+			setNav('personal-objectives')
+		else
+			addNavigate('personal-objectives')
+	})
+
+	onNavTo(/\/student\/([^\/]+)\/personal-objectives\//, match => {
+		document.querySelectorAll('.side-bar>div').forEach(div => div.classList.remove('active'))
+		document.getElementById('personal-objectives-button').classList.add('active')
 	})
 })
 
