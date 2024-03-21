@@ -1,139 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Document</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/Chart.js"></script>
+    <script src="client-sdk.js"></script>
+    <script src="js/nav-handler.js"></script>
+  </head>
 
-	<link rel="stylesheet" href="css/style.css" />
-	<script src="js/Chart.js"></script>
-	<script src="client-sdk.js"></script>
-	<script src="js/nav-handler.js"></script>
-</head>
+  <body>
+    <header-component></header-component>
 
-<body>
-	<header-component></header-component>
+    <div id="overlay" class="overlay">
+      <div class="overlay-content">
+        <h2>Upload Exam</h2>
+        <button id="closeOverlay" class="close-btn">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 1L1 13M1 1L13 13"
+              stroke="black"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <div id="uploadForm">
+          <input
+            type="text"
+            id="examId"
+            name="examId"
+            placeholder="Enter exam Id"
+            required
+          />
 
-	<div id="overlay" class="overlay">
-		<div class="overlay-content">
-			<h2>Upload Exam</h2>
-			<button id="closeOverlay" class="close-btn">
-				<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M13 1L1 13M1 1L13 13" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-				</svg>
-			</button>
-			<div id="uploadForm">
-				<input type="text" id="examId" name="examId" placeholder="Enter exam Id" required>
-
-				<br>
-				<label for="pdfFile" id="fileInput">
-					<div id="dropArea" class="drop-area">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-							<path fill="currentColor" d="M18 6L6 18M6 6l12 12" />
-						</svg>
-						<span>Drag & Drop or Click to Upload PDF File</span>
-					</div>
-				</label>
-				<input type="file" id="pdfFile" name="pdfFile" accept=".pdf" style="display: none;" required>
-				<br>
-				<button type="submit">Submit</button>
-			</div>
-		</div>
-	</div>
-
-	<div class="container">
-		<div class="table-container">
-			<table id="studentTable">
-				<thead>
-					<tr>
-						<th>NAME</th>
-						<th>LAST ENTRY</th>
-						<th>OVERALL TREND</th>
-						<th>UPLOAD EXAM</th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-	</div>
-
-	<div class="container">
-		<div class="person-details">
-			<div class="chart-container">
-<<<<<<< HEAD
-				<div class="chart lineChart">
-					<h2>Schoolyear trend</h2>
-					<canvas id="lineChart"></canvas>
-				</div>
-				<div class="chart">
-					<h2>Assessed competences math</h2>
-					<canvas id="radarChartMath" width="400px" height="400px"></canvas>
-
-				</div>
-				<div class="chart">
-					<h2>Assessed competences interdisciplinary</h2>
-					<canvas id="radarChartInt" width="400px" height="400px"></canvas>
-				</div>
-			</div>
-
-			<div class="side-bar">
-				<div id="personal-exams-button">Exams</div>
-				<div id="personal-observations-button">Observations</div>
-			</div>
-
-			<div class="container" id="personal-exams">
-
-			</div>
-
-			<div class="container" id="personal-observations">
-=======
-        <div class="chart-display-flex">
-          <div class="chart lineChart">
-            <h2>Schoolyear trend</h2>
-            <canvas id="lineChart" width="600" height="300"></canvas>
+          <br />
+          <label for="pdfFile" id="fileInput">
+            <div id="dropArea" class="drop-area">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path fill="currentColor" d="M18 6L6 18M6 6l12 12" />
+              </svg>
+              <span>Drag & Drop or Click to Upload PDF File</span>
+            </div>
+          </label>
+          <input
+            type="file"
+            id="pdfFile"
+            name="pdfFile"
+            accept=".pdf"
+            style="display: none"
+            required
+          />
+          <br />
+          <button type="submit">Submit</button>
         </div>
-          <div class="chart">
-            <h2>Assessed competences math</h2>
-            <canvas id="radarChartMath" width="400px" height="400px"></canvas>
-  
-          </div>
-          <div class="chart">
-            <h2>Assessed competences interdisciplinary</h2>
-            <canvas id="radarChartInt" width="400px" height="400px"></canvas>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="table-container">
+        <table id="studentTable">
+          <thead>
+            <tr>
+              <th>NAME</th>
+              <th>LAST ENTRY</th>
+              <th>OVERALL TREND</th>
+              <th>UPLOAD EXAM</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="person-details">
+		
+
+        <div class="side-bar">
+          <div id="personal-exams-button">Exams</div>
+          <div id="personal-observations-button">Observations</div>
+        </div>
+
+
+        <div class="" id="personal-exams"></div>
+
+        <div class="" id="personal-observations"></div>
+		
+        <div class="chart-container">
+          <div class="chart-display-flex">
+            <div class="chart lineChart">
+              <h2>Schoolyear trend</h2>
+              <canvas id="lineChart" width="600" height="300"></canvas>
+            </div>
+            <div class="chart">
+              <h2>Assessed competences math</h2>
+              <canvas id="radarChartMath" width="400px" height="400px"></canvas>
+            </div>
+            <div class="chart">
+              <h2>Assessed competences interdisciplinary</h2>
+              <canvas id="radarChartInt" width="400px" height="400px"></canvas>
+            </div>
           </div>
         </div>
-			</div>
 
-			<div class="side-bar">
->>>>>>> 592f8ff (idk oli stuff)
+		
+        <div class="container">
+          <div class="input-container">
+            <input
+              type="text"
+              id="observationsInput"
+              onchange="this.value=''"
+              placeholder="Enter observations..."
+            />
+          </div>
+        </div>
 
-			</div>
-
-			<div class="container">
-				<div class="input-container">
-					<input type="text" id="observationsInput" onchange="this.value=''" placeholder="Enter observations...">
-				</div>
-			</div>
-
-=======
-
-			<div class="container">
-				<div id="">
-					<button id="submitObservations">Submit</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
->>>>>>> 592f8ff (idk oli stuff)
-	<footer>
-		<script src="js/header.js"></script>
-		<script src="js/events.js"></script>
-		<script src="js/student.js"></script>
-		<script src="js/dnd.js"></script>
-	</footer>
-</body>
-
+      </div>
+    </div>
+    <footer>
+      <script src="js/header.js"></script>
+      <script src="js/events.js"></script>
+      <script src="js/student.js"></script>
+      <script src="js/dnd.js"></script>
+    </footer>
+  </body>
 </html>
