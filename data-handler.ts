@@ -1,27 +1,24 @@
 import Datastore from '@seald-io/nedb'
+import { ExamType, StudentType, TokenType } from './models'
 
-export type Student = {
-    firstName: string
-    lastName: string
-}
-
-const students = new Datastore<Student>({
-    filename: 'database/students.db',
-    autoload: true
-})
-
-export type Token = {
-    token: string
-    accessLevel: number
-}
-
-const tokens = new Datastore<Token>({
+const tokens = new Datastore<TokenType>({
     filename: 'database/tokens.db',
     autoload: true
 })
 
+const students = new Datastore<StudentType>({
+    filename: 'database/students.db',
+    autoload: true
+})
+
+const exams = new Datastore<ExamType>({
+    filename: 'database/exams.db',
+    autoload: true
+})
+
 export const db = {
-    students
+    students,
+    exams
 }
 
 export async function checkToken(token: string, accessLevel: number): Promise<boolean> {

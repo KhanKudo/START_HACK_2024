@@ -19,7 +19,20 @@ const config: {
             keepAliveSSE: boolean
         }
     }
-} = {"GET":{"students":{
+} = {"GET":{"tokenAccess":{
+req:{"token":String},
+res:{"200":{"accessLevel":Number}},
+accessLevel:0,
+keepAliveSSE:false,
+handlers:{code200:function (res:ResponseType, data:{"accessLevel":number}) {
+                res
+                    .writeHead(200, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            }}},
+"students":{
 req:undefined,
 res:{"200":[{"firstName":String,"lastName":String}]},
 accessLevel:1000,
@@ -32,14 +45,77 @@ handlers:{code200:function (res:ResponseType, data:({"firstName":string,"lastNam
                 })
                     .end(typeof data === "object" ? JSON.stringify(data) : data);
             }}},
-"tokenAccess":{
-req:{"token":String},
-res:{"200":{"accessLevel":Number}},
-accessLevel:0,
+"exam":{
+req:{"examId":String,"studentId":String},
+res:{"200":{"studentId":String,"examId":String},"404":"Exam not found!"},
+accessLevel:1000,
 keepAliveSSE:false,
-handlers:{code200:function (res:ResponseType, data:{"accessLevel":number}) {
+handlers:{code200:function (res:ResponseType, data:{"studentId":string,"examId":string}) {
                 res
                     .writeHead(200, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            },
+code404:function (res:ResponseType, data:"Exam not found!"="Exam not found!") {
+                res
+                    .writeHead(404, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            }}},
+"exams":{
+req:[{"examId":String,"studentId":undefined},{"examId":undefined,"studentId":String}],
+res:{"200":[{"studentId":String,"examId":String}]},
+accessLevel:1000,
+keepAliveSSE:false,
+handlers:{code200:function (res:ResponseType, data:({"studentId":string,"examId":string})[]) {
+                res
+                    .writeHead(200, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            }}},
+"examPDF":{
+req:{"examId":String,"studentId":String},
+res:{"200":String,"404":["Exam Entry not found!","Exam PDF File not found!"]},
+accessLevel:1000,
+keepAliveSSE:false,
+handlers:{code200:function (res:ResponseType, data:string) {
+                res
+                    .writeHead(200, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            },
+code404:function (res:ResponseType, data:("Exam Entry not found!"|"Exam PDF File not found!")) {
+                res
+                    .writeHead(404, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            }}}},
+"POST":{"exam":{
+req:{"studentId":String,"examId":String,"dataURI":[undefined,String]},
+res:{"200":"Exam successfully added!","409":"Exam already exists!"},
+accessLevel:5000,
+keepAliveSSE:false,
+handlers:{code200:function (res:ResponseType, data:"Exam successfully added!"="Exam successfully added!") {
+                res
+                    .writeHead(200, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            },
+code409:function (res:ResponseType, data:"Exam already exists!"="Exam already exists!") {
+                res
+                    .writeHead(409, {
                     'Content-Type': 'text/plain',
                     "Access-Control-Allow-Origin": "*"
                 })
@@ -142,10 +218,21 @@ function readRequestBody(req: ResponseType['req']): Promise<string> {
     })
 }
 
-export async function handler(response: ResponseType, handlers: {"GET":{"students":(data:undefined,res:{
+export async function handler(response: ResponseType, handlers: {"GET":{"tokenAccess":(data:{"token":string},res:{
+code200:(data:{"accessLevel":number})=>void})=>void|Promise<void>,
+"students":(data:undefined,res:{
 code200:(data:({"firstName":string,"lastName":string})[])=>void})=>void|Promise<void>,
-"tokenAccess":(data:{"token":string},res:{
-code200:(data:{"accessLevel":number})=>void})=>void|Promise<void>} }): Promise<void> {
+"exam":(data:{"examId":string,"studentId":string},res:{
+code200:(data:{"studentId":string,"examId":string})=>void,
+code404:(data?:"Exam not found!")=>void})=>void|Promise<void>,
+"exams":(data:({"examId":string,"studentId":undefined}|{"examId":undefined,"studentId":string}),res:{
+code200:(data:({"studentId":string,"examId":string})[])=>void})=>void|Promise<void>,
+"examPDF":(data:{"examId":string,"studentId":string},res:{
+code200:(data:string)=>void,
+code404:(data:("Exam Entry not found!"|"Exam PDF File not found!"))=>void})=>void|Promise<void>},
+"POST":{"exam":(data:{"studentId":string,"examId":string,"dataURI":(undefined|string)},res:{
+code200:(data?:"Exam successfully added!")=>void,
+code409:(data?:"Exam already exists!")=>void})=>void|Promise<void>} }): Promise<void> {
     const request = response.req
     if (!request.url || !request.method || !request.headers) {
         response

@@ -1,4 +1,5 @@
-import { Student, Token } from './models'
+import { ConvertToRuntimeType } from './ConstructorTypeMap'
+import { Exam, ExamType, Student, Token } from './models'
 
 export declare type MethodType = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
@@ -14,8 +15,6 @@ const AnyTokenAccess = 1
 //* 2-999 undefined
 //* read access
 const ReadAccess = 1000
-//* Tag/Locator access
-const TagLocatorAccess = 4000
 //* write access
 const WriteAccess = 5000
 //* admin access
@@ -53,7 +52,7 @@ export const REST_API: ApiType = {
     globalDefaults: {
         GET: {
             accessLevel: ReadAccess,
-            // keepAliveSSE: false
+            keepAliveSSE: false
         },
         POST: {
             accessLevel: WriteAccess
@@ -66,11 +65,6 @@ export const REST_API: ApiType = {
         },
     },
     GET: {
-        students: {
-            res: {
-                200: [Student],
-            },
-        },
         tokenAccess: {
             accessLevel: PublicAccess,
             req: {
@@ -80,6 +74,58 @@ export const REST_API: ApiType = {
                 200: {
                     accessLevel: Number
                 }
+            }
+        },
+        students: {
+            res: {
+                200: [Student],
+            },
+        },
+        exam: {
+            req: {
+                examId: String,
+                studentId: String
+            },
+            res: {
+                200: Exam,
+                404: 'Exam not found!'
+            }
+        },
+        exams: {
+            req: [
+                {
+                    examId: String,
+                    studentId: null
+                },
+                {
+                    examId: null,
+                    studentId: String
+                }
+            ],
+            res: {
+                200: [Exam]
+            }
+        },
+        examPDF: {
+            req: {
+                examId: String,
+                studentId: String
+            },
+            res: {
+                200: String,
+                404: ['Exam Entry not found!', 'Exam PDF File not found!']
+            }
+        },
+    },
+    POST: {
+        exam: {
+            req: {
+                ...Exam,
+                dataURI: [null, String],
+            },
+            res: {
+                200: 'Exam successfully added!',
+                409: 'Exam already exists!'
             }
         }
     }
