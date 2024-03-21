@@ -239,13 +239,19 @@ button[type="submit"] {
     width: 70vw;
     height: 40px;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
     font-size: 16px;
     color: #333;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    /* Border with gradient */
+    border: 1px solid transparent; /* Hide the original border */
+    border-radius: 10px;
+    border-image: linear-gradient(to bottom right, #00C6FF, #0072FF) 1; /* Apply gradient border */
+    border-image-slice: 1; /* Ensure the entire border is filled with the gradient */
   }
+  
+  
   
   input[type="text"]::placeholder {
     color: #999; /* Placeholder text color */
