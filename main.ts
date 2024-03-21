@@ -102,7 +102,9 @@ const server = new Server(async (req, res) => {
                     if (!db.students.findOneAsync({ studentId }))
                         return code404()
 
-                    return code200(await db.observations.findAsync({ studentId }))
+                    return code200(await db.observations.findAsync({ studentId }).sort({
+                        date: -1
+                    }))
                 }
             },
             POST: {
