@@ -24,7 +24,8 @@ api.getStudents().then(({ data, ok }) => {
           Math.random() * 100,
           Math.random() * 100,
           Math.random() * 100,
-        ]
+        ],
+        trendData: [100, 50, 70, 40, 70, 90],
       }
     ))
   })
@@ -92,7 +93,7 @@ function createStudentRow(student) {
   tr.innerHTML = `
   <td>${student.name}</td>
   <td>${student.lastUpdate}</td>
-  <td>${student.trend}</td>
+  <td><canvas class="trend-chart" width="100px" height="40px"></canvas></td>
   <td><button class="upload-btn">Upload</button></td>
   `
 
@@ -111,7 +112,32 @@ function createStudentRow(student) {
     navigateTo('student', student._id)
   })
 
+  const canvas = tr.querySelector('.trend-chart');
+  drawMiniChart(canvas, student.trendData); // Pass student's trend data to draw the mini chart
+
+
   return tr
+}
+
+function drawMiniChart(canvas, data) {
+  const ctx = canvas.getContext('2d');
+  const maxValue = 100;
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Draw chart based on data
+  // Example: draw a simple line
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  for (let i = 0; i < data.length; i++) {
+    const value = data[i]; // Assuming data is an array of values
+    const x = (i / (data.length - 1)) * canvas.width;
+    const y = canvas.height - (value / maxValue) * canvas.height; // Scale value to fit canvas height
+    //console.log(x, y)
+    ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = 'green';
+  ctx.lineWidth = 1;
+  ctx.stroke();
 }
 
 const studentData = {
@@ -133,6 +159,15 @@ const studentData = {
 
 async function loadDataForStudent(studentId) {
   const student = studentData
+
+  api.getExams({ studentId }).then(({ data, ok, status }) => {
+    if (!ok)
+      return console.error(status, data)
+
+    data.forEach(exam => {
+      document.querySelector('#examTable tbody').append(createExamRow(exam))
+    })
+  })
   // Here you can fetch data for the selected student and update the radar chart and line chart accordingly
   // Radar Chart Data
   const radarDataMath = {
@@ -148,7 +183,9 @@ async function loadDataForStudent(studentId) {
     }]
   }
   const radarDataInt = {
-    labels: ['Selbstreflexion', 'Selbstständigkeit', 'Dialog & Kooperationsfähigkeit'],
+    labels: ['Selbstreflexion', 'Dialog- und Kooperationsf\u00e4higkeit', 'Sprachf\u00e4higkeit',
+  'Aufgaben/Probleme l\u00f6sen', 'Selbstst\u00e4ndigkeit', 'Eigenst\u00e4ndigkeit',
+'Konfliktf\u00e4higkeit', 'Informationen nutzen', 'Umgang mit Vielfalt'],
     datasets: [{
       label: student.name,
       data: student.data,
@@ -160,10 +197,10 @@ async function loadDataForStudent(studentId) {
 
   // Line Chart Data
   const lineData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     datasets: [{
       label: 'Performance',
-      data: [200, 150, 200, 250, 300, 350],
+      data: [200, 150, 200, 250, 300, 350, 200, 250, 300, 350, 200, 150],
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',
       borderWidth: 1
@@ -210,7 +247,8 @@ async function loadDataForStudent(studentId) {
     options: {
       scales: {
         y: {
-          beginAtZero: true
+          beginAtZero: false,
+          maintainAspectRatio: false
         }
       }
     }

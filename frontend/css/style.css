@@ -99,10 +99,6 @@ tr:hover {
     
   }
 
-  .close-btn {
-    
-  }
-
   #closeOverlay {
     background-color: transparent;
     border: none;
@@ -192,13 +188,13 @@ button[type="submit"] {
     display: block;
 }
 
-.chart-container {
-    
+.chart-display-flex {
     display: flex;
     width: 70vw;
     flex-wrap: wrap;
+
     justify-content: center;
-    
+    margin-bottom: 100px;
 }
 
 .chart {
@@ -208,9 +204,8 @@ button[type="submit"] {
     padding: 20px;
     margin-bottom: 20px;
     margin-right: 20px;
-     /* Make charts grow to fill remaining space */
-    min-width: 600px;
-    min-height: 300px;
+    width: 600px;
+    min-height: 400px; /* Set the height of the container */
 }
 
 .chart h2 {
@@ -220,13 +215,15 @@ button[type="submit"] {
 }
 
 .lineChart {
-    flex-grow: 1;
-    flex-basis: 100%;
-    max-height: 400px;
+    width: 100%; /* Ensure the canvas fills the container */
+    height: 100%; /* Set the height of the canvas */
 }
 
-#lineChart {
-    max-height: 80%;
+.lineChart canvas {
+    width: 100%; /* Ensure the canvas fills the container */
+    height: 100%; /* Set the height of the canvas */
+    max-width: 1000px; /* Maximum width of the canvas */
+    max-height: 450px; /* Maximum height of the canvas */
 }
 
 

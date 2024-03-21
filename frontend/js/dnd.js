@@ -38,7 +38,8 @@ dropArea.addEventListener('drop', (event) => {
   handleFiles(files)
 })
 
-dropArea.addEventListener('click', () => {
+dropArea.addEventListener('click', (event) => {
+  event.preventDefault();
   fileInput.click()
 })
 
