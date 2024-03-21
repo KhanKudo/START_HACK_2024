@@ -204,17 +204,21 @@ async function loadDataForStudent(studentId) {
 		}]
 	}
 	const radarDataInt = {
-		labels: ['Selbstreflexion', 'Dialog- und Kooperationsf\u00e4higkeit', 'Sprachf\u00e4higkeit',
-			'Aufgaben/Probleme l\u00f6sen', 'Selbstst\u00e4ndigkeit', 'Eigenst\u00e4ndigkeit',
-			'Konfliktf\u00e4higkeit', 'Informationen nutzen', 'Umgang mit Vielfalt'],
-		datasets: [{
-			label: student.name,
-			data: student.data,
-			backgroundColor: 'rgba(54, 162, 235, 0.2)',
-			borderColor: 'rgba(54, 162, 235, 1)',
-			borderWidth: 1
-		}]
-	}
+    labels: ['Selbstreflexion', 'Dialog- und Kooperationsf\u00e4higkeit', 'Sprachf\u00e4higkeit',
+      'Aufgaben/Probleme l\u00f6sen', 'Selbstst\u00e4ndigkeit', 'Eigenst\u00e4ndigkeit',
+      'Konfliktf\u00e4higkeit', 'Informationen nutzen', 'Umgang mit Vielfalt'],
+    datasets: [{
+      label: student.name,
+      data: student.data,
+      backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+      borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
+        'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+      borderWidth: 1
+    }]
+  };
 
 	// Line Chart Data
 	const lineData = {
@@ -246,21 +250,35 @@ async function loadDataForStudent(studentId) {
 	}
 
   const radarConfigInt = {
-    type: 'radar',
+    type: 'polarArea',
     data: radarDataInt,
     options: {
       scales: {
         r: {
-          angleLines: {
-            display: false
-          },
           suggestedMin: 0,
-          suggestedMax: 100
+          suggestedMax: 100,
+          grid: {
+            display: false
+          }
         }
       },
-
+      elements: {
+        line: {
+          borderWidth: 0
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'right'
+        }
+      },
+      pointLabels: {
+        display: true,
+        fontSize: 14
+      }
     }
-  }
+  };
+  
 
 	// Line Chart Configuration
 	const lineConfig = {
