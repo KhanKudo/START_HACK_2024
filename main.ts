@@ -6,11 +6,15 @@ import { askChatGPT } from './chatgpt'
 import { db, getTokenAccess } from './data-handler'
 import { handler } from './server-sdk'
 
+// db.exams.removeAsync({}, { multi: true }).then(console.log)
+
 // db.students.insertAsync({ firstName: 'Jane', lastName: 'Smith' }).then(console.log)
 db.students.findAsync({}).sort({
     lastName: 1,
     firstName: 1,
 }).then(console.log)
+
+db.exams.findAsync({}).then(console.log)
 
 const server = new Server(async (req, res) => {
     const url = new URL(req.url ?? '', 'http://localhost:3000')
@@ -62,7 +66,7 @@ const server = new Server(async (req, res) => {
             POST: {
                 exam: async ({ examId, studentId, dataURI }, { code200, code409 }) => {
                     const exam = await db.exams.findOneAsync({ examId, studentId })
-                    if (!exam)
+                    if (exam)
                         return code409()
 
                     const filePath = path.join(__dirname, 'database', 'exams', examId, studentId + '.pdf')
@@ -70,13 +74,13 @@ const server = new Server(async (req, res) => {
                     if (fs.existsSync(filePath))
                         return code409()
 
-                    await db.exams.insertAsync({ examId, studentId, dataURI })
+                    await db.exams.insertAsync({ examId, studentId })
 
                     if (dataURI) {
-                        const fs = require('fs')
-                        const uri = dataURI
-                        const data = uri.split(',')[1]
-                        const buf = Buffer.from(data).toString('base64')
+                        const buf = Buffer.from(dataURI, 'binary')
+                        fs.mkdirSync(path.join(filePath, '../'), {
+                            recursive: true
+                        })
                         fs.writeFileSync(filePath, buf)
                     }
 

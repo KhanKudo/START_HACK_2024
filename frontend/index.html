@@ -23,7 +23,7 @@
           <path d="M13 1L1 13M1 1L13 13" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </button>
-      <form id="uploadForm">
+      <div id="uploadForm">
         <input type="text" id="examId" name="examId" placeholder="Enter exam Id" required>
 
         <br>
@@ -39,7 +39,7 @@
 
         <br>
         <button type="submit">Submit</button>
-      </form>
+      </div>
 
     </div>
   </div>
@@ -66,16 +66,25 @@
   <div class="container">
     <div class="person-details">
       <div class="chart-container">
+        <div class="chart lineChart">
+          <h2>Schoolyear trend</h2>
+          <canvas id="lineChart" ></canvas>
+        </div>
         <div class="chart">
           <h2>Assessed competences math</h2>
-          <canvas id="radarChart" width="400px" height="400px"></canvas>
+          <canvas id="radarChartMath" width="400px" height="400px"></canvas>
 
         </div>
         <div class="chart">
-          <h2>Schoolyear trend</h2>
-          <canvas id="lineChart" width="400px" height="400px"></canvas>
+          <h2>Assessed competences interdisciplinary</h2>
+          <canvas id="radarChartInt" width="400px" height="400px"></canvas>
+
         </div>
+        
       </div>
+
+
+
       <div class="container">
         <div class="input-container">
           <input type="text" id="observationsInput" onchange="this.value=''" placeholder="Enter observations...">

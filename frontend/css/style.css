@@ -180,13 +180,17 @@ button[type="submit"] {
     display: none;
 }
 
+.person-details.active {
+    display: block;
+}
+
 .chart-container {
     
     display: flex;
-}
-
-.person-details.active {
-    display: block;
+    width: 70vw;
+    flex-wrap: wrap;
+    justify-content: center;
+    
 }
 
 .chart {
@@ -196,9 +200,9 @@ button[type="submit"] {
     padding: 20px;
     margin-bottom: 20px;
     margin-right: 20px;
-    flex: 1; /* Make charts grow to fill remaining space */
-    min-width: 500px;
-    min-height: 500px;
+     /* Make charts grow to fill remaining space */
+    min-width: 600px;
+    min-height: 300px;
 }
 
 .chart h2 {
@@ -207,15 +211,11 @@ button[type="submit"] {
     color: #333;
 }
 
-#radarChart {
-    width: 100%; /* Make radar chart fill its container */
-    aspect-ratio: 1; /* Ensure radar chart is square */
+.lineChart {
+    width: 100%;
+    height: 5%;
 }
 
-#lineChart {
-    width: 100%; /* Make line chart fill its container */
-    height: 100%; /* Make line chart fill its container height */
-}
 
 .input-container {
     position: fixed;

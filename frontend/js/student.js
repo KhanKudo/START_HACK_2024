@@ -33,7 +33,7 @@ window.addEventListener('load', e => {
   showWhile(/\/student\//, document.querySelector('.person-details'))
 
   document.getElementById('closeOverlay').addEventListener('click', () => {
-    subNavigate()
+    subNavigate(2)
   })
 
   document.getElementById('uploadForm').addEventListener('submit', (event) => {
@@ -43,7 +43,7 @@ window.addEventListener('load', e => {
     console.log('PDF File:', document.getElementById('pdfFile').files[0])
   })
 
-  onNavTo(/\/student\/(.+)\//, match => {
+  onNavTo(/\/student\/([^\/]+)\//, match => {
     const studentId = match[1]
     loadDataForStudent(studentId)
   })
@@ -61,7 +61,7 @@ function createStudentRow(student) {
   tr.querySelector('.upload-btn').addEventListener('click', (event) => {
     event.stopPropagation()
     console.log('Upload button clicked for student:', student)
-    addNavigate('upload-overlay')
+    addNavigate('upload-overlay', student._id)
   })
 
   tr.addEventListener('click', (event) => {
@@ -97,10 +97,20 @@ async function loadDataForStudent(studentId) {
   const student = studentData
   // Here you can fetch data for the selected student and update the radar chart and line chart accordingly
   // Radar Chart Data
-  const radarData = {
-    labels: ['Operieren und Benennen', 'Erforschen und Argumentieren', 'Mathematisieren und Darstellen',
-      'Operieren und Benennen', 'Erforschen und Argumentieren', 'Mathematisieren und Darstellen',
-      'Operieren und Benennen', 'Erforschen und Argumentieren', 'Mathematisieren und Darstellen'],
+  const radarDataMath = {
+    labels: ['1 | Operieren und Benennen', '1 | Erforschen und Argumentieren', '1 | Mathematisieren und Darstellen',
+      '2 | Operieren und Benennen', '2 | Erforschen und Argumentieren', '2 | Mathematisieren und Darstellen',
+      '3 | Operieren und Benennen', '3 | Erforschen und Argumentieren', '3 | Mathematisieren und Darstellen'],
+    datasets: [{
+      label: student.name,
+      data: student.data,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 1
+    }]
+  }
+  const radarDataInt = {
+    labels: ['Selbstreflexion', 'Selbstständigkeit', 'Dialog & Kooperationsfähigkeit'],
     datasets: [{
       label: student.name,
       data: student.data,
@@ -123,9 +133,25 @@ async function loadDataForStudent(studentId) {
   }
 
   // Radar Chart Configuration
-  const radarConfig = {
+  const radarConfigMath = {
     type: 'radar',
-    data: radarData,
+    data: radarDataMath,
+    options: {
+      scales: {
+        r: {
+          angleLines: {
+            display: false
+          },
+          suggestedMin: 0,
+          suggestedMax: 100
+        }
+      }
+    }
+  }
+
+  const radarConfigInt = {
+    type: 'radar',
+    data: radarDataInt,
     options: {
       scales: {
         r: {
@@ -153,8 +179,11 @@ async function loadDataForStudent(studentId) {
   }
 
   // Create Radar Chart
-  const radarChartCtx = document.getElementById('radarChart').getContext('2d')
-  const radarChart = new Chart(radarChartCtx, radarConfig)
+  const radarChartCtx = document.getElementById('radarChartMath').getContext('2d')
+  const radarChart = new Chart(radarChartCtx, radarConfigMath)
+
+  const radarChartCtx2 = document.getElementById('radarChartInt').getContext('2d')
+  const radarChart2 = new Chart(radarChartCtx2, radarConfigInt)
 
   // Create Line Chart
   const lineChartCtx = document.getElementById('lineChart').getContext('2d')
