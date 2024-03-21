@@ -1,264 +1,287 @@
 body {
-    margin: 0;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #F4F5F7;
+	margin: 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #F4F5F7;
 }
 
 .navbar {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+
 }
 
 .table-container {
-    border-radius: 10px; /* Adjust as needed */
-    width: 70%;
-    overflow: hidden; /* Ensure rounded corners are visible */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  #studentTable {
-    width: 100%; /* Ensure table fills its container */
-    border-collapse: collapse;
-  }
-  
-  #studentTable th,
-  #studentTable td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ccc;
-  }
-  
+	border-radius: 10px;
+	/* Adjust as needed */
+	width: 70%;
+	overflow: hidden;
+	/* Ensure rounded corners are visible */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#studentTable {
+	width: 100%;
+	/* Ensure table fills its container */
+	border-collapse: collapse;
+}
+
+#studentTable th,
+#studentTable td {
+	padding: 10px;
+	text-align: left;
+	border-bottom: 1px solid #ccc;
+}
+
 td:first-child {
-    user-select: text;
+	user-select: text;
 }
 
 th, td {
-    padding: 20px;
-    text-align: left;
-    cursor: pointer;
-    user-select: none;
+	padding: 20px;
+	text-align: left;
+	cursor: pointer;
+	user-select: none;
 }
-th,tr {
-    background-color: #fff;
+
+th, tr {
+	background-color: #fff;
 }
+
 th {
-    color: #A7ABAE;
+	color: #A7ABAE;
 }
+
 tr:hover {
-    background-color: #F4F5F7;
+	background-color: #F4F5F7;
 }
 
 .upload-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    color: #007bff;
-    background-color: transparent;
-    border: 2px solid #007bff;  
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+	display: inline-block;
+	padding: 10px 20px;
+	color: #007bff;
+	background-color: transparent;
+	border: 2px solid #007bff;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s;
 }
 
 .upload-btn:hover {
-    background-color: #007bff;
-    color: #fff;
+	background-color: #007bff;
+	color: #fff;
 }
 
 .overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-  }
-  
-  .overlay-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    min-width: 400px;
-    height: 300px;
-    
-  }
-  
-  .overlay-content h2 {
-    margin-top: 0;
-    
-  }
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1000;
+}
 
-  #closeOverlay {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    
-  }
+.overlay-content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	min-width: 400px;
+	height: 300px;
 
-  /* Reset default styles */
+}
+
+.overlay-content h2 {
+	margin-top: 0;
+
+}
+
+#closeOverlay {
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	position: absolute;
+	right: 20px;
+	top: 20px;
+
+}
+
+/* Reset default styles */
 input[type="text"] {
-    appearance: none;
-    border: none;
-    outline: none;
-    background: none;
-    font-family: inherit;
-    font-size: inherit;
-    color: inherit;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #444444; /* Border color */
-    transition: border-color 0.3s;
-    margin: 10px;
-  }
-  
-  /* Placeholder style */
-  input[type="text"]::placeholder {
-    color: #999; /* Placeholder text color */
-  }
-  
-  /* Hover effect */
-  input[type="text"]:hover {
-    border-color: #33333365; /* Border color on hover */
-  }
-  
-  /* Focus effect */
-  input[type="text"]:focus {
-    border-color: #333; /* Border color on focus */
-  }
-  
-  /* Reset default styles */
-button[type="submit"] {
-    display: inline-block;
-    padding: 10px 20px;
-    color: #007bff;
-    background-color: transparent;
-    border: 2px solid #007bff;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-    margin-left: 10px;
-  }
-  
-  /* Hover effect */
-  button[type="submit"]:hover {
-    background-color: #007bff;
-    color: #fff; /* Button background color on hover */
-  }
-  
+	appearance: none;
+	border: none;
+	outline: none;
+	background: none;
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	padding: 8px;
+	border-radius: 5px;
+	border: 1px solid #444444;
+	/* Border color */
+	transition: border-color 0.3s;
+	margin: 10px;
+}
 
-  .drop-area {
-    border: 2px dashed #007bff;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    margin: 10px;
-  }
-  
-  .drop-area svg {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .drop-area span {
-    color: #007bff;
-  }
-  
+/* Placeholder style */
+input[type="text"]::placeholder {
+	color: #999;
+	/* Placeholder text color */
+}
+
+/* Hover effect */
+input[type="text"]:hover {
+	border-color: #33333365;
+	/* Border color on hover */
+}
+
+/* Focus effect */
+input[type="text"]:focus {
+	border-color: #333;
+	/* Border color on focus */
+}
+
+/* Reset default styles */
+button[type="submit"] {
+	display: inline-block;
+	padding: 10px 20px;
+	color: #007bff;
+	background-color: transparent;
+	border: 2px solid #007bff;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s;
+	margin-left: 10px;
+}
+
+/* Hover effect */
+button[type="submit"]:hover {
+	background-color: #007bff;
+	color: #fff;
+	/* Button background color on hover */
+}
+
+
+.drop-area {
+	border: 2px dashed #007bff;
+	border-radius: 10px;
+	padding: 20px;
+	text-align: center;
+	cursor: pointer;
+	margin: 10px;
+}
+
+.drop-area svg {
+	width: 24px;
+	height: 24px;
+	margin-bottom: 10px;
+}
+
+.drop-area span {
+	color: #007bff;
+}
+
 
 .person-details {
-    display: none;
+	display: none;
 }
 
 .person-details.active {
-    display: block;
+	display: block;
 }
 
 .chart-display-flex {
-    display: flex;
-    width: 70vw;
-    flex-wrap: wrap;
+	display: flex;
+	width: 70vw;
+	flex-wrap: wrap;
 
-    justify-content: center;
-    margin-bottom: 100px;
+	justify-content: center;
+	margin-bottom: 100px;
 }
 
 .chart {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    width: 600px;
-    min-height: 400px; /* Set the height of the container */
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	margin-bottom: 20px;
+	margin-right: 20px;
+	width: 600px;
+	min-height: 400px;
+	/* Set the height of the container */
 }
 
 .chart h2 {
-    margin-top: 0;
-    font-size: 18px;
-    color: #333;
+	margin-top: 0;
+	font-size: 18px;
+	color: #333;
 }
 
 .lineChart {
-    width: 100%; /* Ensure the canvas fills the container */
-    height: 100%; /* Set the height of the canvas */
+	width: 100%;
+	/* Ensure the canvas fills the container */
+	height: 100%;
+	/* Set the height of the canvas */
 }
 
 .lineChart canvas {
-    width: 100%; /* Ensure the canvas fills the container */
-    height: 100%; /* Set the height of the canvas */
-    max-width: 1000px; /* Maximum width of the canvas */
-    max-height: 450px; /* Maximum height of the canvas */
+	width: 100%;
+	/* Ensure the canvas fills the container */
+	height: 100%;
+	/* Set the height of the canvas */
+	max-width: 1000px;
+	/* Maximum width of the canvas */
+	max-height: 450px;
+	/* Maximum height of the canvas */
 }
 
 
 
 .input-container {
-    position: fixed;
-    bottom: 20px; /* Adjust as needed */
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  input[type="text"] {
-    width: 70vw;
-    height: 40px;
-    padding: 10px;
-    font-size: 16px;
-    color: #333;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    
-    /* Border with gradient */
-    border: 1px solid transparent; /* Hide the original border */
-    border-radius: 10px;
-    border-image: linear-gradient(to bottom right, #00C6FF, #0072FF) 1; /* Apply gradient border */
-    border-image-slice: 1; /* Ensure the entire border is filled with the gradient */
-  }
-  
-  
-  
-  input[type="text"]::placeholder {
-    color: #999; /* Placeholder text color */
-  }
-  
-  input[type="text"]:focus {
-    border-color: #007bff; /* Border color on focus */
-    outline: none;
-  }
-  
+	position: fixed;
+	bottom: 20px;
+	/* Adjust as needed */
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+input[type="text"] {
+	width: 70vw;
+	height: 40px;
+	padding: 10px;
+	font-size: 16px;
+	color: #333;
+	background-color: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+	/* Border with gradient */
+	border: 1px solid transparent;
+	/* Hide the original border */
+	border-radius: 10px;
+	border-image: linear-gradient(to bottom right, #00C6FF, #0072FF) 1;
+	/* Apply gradient border */
+	border-image-slice: 1;
+	/* Ensure the entire border is filled with the gradient */
+}
+
+
+
+input[type="text"]::placeholder {
+	color: #999;
+	/* Placeholder text color */
+}
+
+input[type="text"]:focus {
+	border-color: #007bff;
+	/* Border color on focus */
+	outline: none;
+}

@@ -84,7 +84,7 @@ class Header extends HTMLElement {
 
       .logo img {
           width: 180px;
-
+        cursor: pointer;
       }
 
       .nav-menu {
@@ -92,9 +92,10 @@ class Header extends HTMLElement {
           display: flex;
           gap: 55px;
           padding: 20px;
+          user-select: none;
       }
 
-      .nav-menu li a {
+      .nav-menu li {
           text-decoration: none;
           color: #4C40F7;
           font-weight: bold;
@@ -102,18 +103,18 @@ class Header extends HTMLElement {
           transition: font-size 0.1s;
       }
 
-      .nav-menu li a:hover {
+      .nav-menu li:hover {
         color: #007bff;
         cursor: pointer;
         transform: scale(1.02);
         transition: transform 0.1s;
       }
 
-      .nav-menu a.active {
+      .nav-menu li:active {
         color: #001;
       }
 
-      .nav-menu a:not(.active) {
+      .nav-menu li:not(:active) {
         color: #8E8E8E;
       }
 
@@ -184,7 +185,7 @@ class Header extends HTMLElement {
         <nav class="navbar">
           <a>
             <div class="logo">
-                <img id="logo" src="/assets/logo.png" alt="Logo">
+                <img id="logo" draggable="false" onclick="navigateTo('students')" src="/assets/logo.png" alt="Logo">
             </div>
           </a>
           <ul class="nav-menu">
