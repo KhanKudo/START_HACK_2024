@@ -1,18 +1,15 @@
-import * as fs from 'fs'
+import Datastore from '@seald-io/nedb'
 
 type Student = {
-    id: number
     firstName: string
     lastName: string
 }
 
-type DatabaseType = {
-    students: Student[]
-}
+const students = new Datastore<Student>({
+    filename: 'database/students.db',
+    autoload: true
+})
 
-export const database: DatabaseType = JSON.parse(fs.readFileSync('./database.json', 'utf-8'))
-
-export function saveDatabase() {
-    fs.copyFileSync('./database.json', `./history/database${new Date().getMilliseconds()}.json`)
-    fs.writeFileSync('./database.json', JSON.stringify(database))
+export const db = {
+    students
 }
