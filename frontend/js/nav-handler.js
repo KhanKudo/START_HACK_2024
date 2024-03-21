@@ -4,6 +4,11 @@
 const showRules = []
 
 /**
+ * @type {[RegExp, (matches: RegExpMatchArray)=>void]}
+ */
+const onNavToExecutors = []
+
+/**
  *
  * @param {RegExp} condition
  * @param  {...HTMLElement} elements
@@ -20,6 +25,8 @@ function showWhile(condition, ...elements) {
 function navigateTo(...path) {
     window.history.replaceState({}, '', window.location.pathname + ('?/' + path.join('/') + '/').replace(/\/+/g, '/'))
     validateShowRules()
+
+    callOnNavExecutors()
 }
 
 /**
@@ -57,6 +64,10 @@ function subNavigate(levels = 1) {
     navigateTo(...getSplitPath().slice(0, -levels))
 }
 
+/**
+ *
+ * @param {boolean} onlyLatest
+ */
 function validateShowRules(onlyLatest = false) {
     const rules = (onlyLatest) ? showRules.slice(-1) : showRules
 
@@ -75,6 +86,36 @@ function validateShowRules(onlyLatest = false) {
     }
 }
 
+/**
+ *
+ * @param {boolean} onlyLatest
+ */
+function callOnNavExecutors(onlyLatest = false) {
+    const execs = (onlyLatest) ? onNavToExecutors.slice(-1) : onNavToExecutors
+    const location = ('/' + getSplitPath().join('/') + '/')
+
+    for (const [match, executor] of execs) {
+        const res = location.match(match)
+
+        if (res === null)
+            continue
+
+        executor(res)
+    }
+}
+
+/**
+ *
+ * @param {RegExp} match
+ * @param {(matches: RegExpMatchArray)=>void} execute
+ */
+function onNavTo(match, execute) {
+    onNavToExecutors.push([match, execute])
+
+    callOnNavExecutors(true)
+}
+
 window.addEventListener('load', e => {
     validateShowRules()
+    callOnNavExecutors()
 })

@@ -11,6 +11,17 @@ api.getStudents().then(({ data, ok }) => {
         name: student.lastName + ' ' + student.firstName,
         lastUpdate: new Date().toLocaleDateString(),
         trend: 'Up',
+        data: [
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+          Math.random() * 100,
+        ]
       }
     ))
   })
@@ -31,6 +42,11 @@ window.addEventListener('load', e => {
     console.log('Exam ID:', document.getElementById('examId').value)
     console.log('PDF File:', document.getElementById('pdfFile').files[0])
   })
+
+  onNavTo(/\/student\/(.+)\//, match => {
+    const studentId = match[1]
+    loadDataForStudent(studentId)
+  })
 })
 
 function createStudentRow(student) {
@@ -49,29 +65,42 @@ function createStudentRow(student) {
   })
 
   tr.addEventListener('click', (event) => {
-    if (loadedStudent === student._id) {
+    if (getSplitPath().includes(student._id)) {
       navigateTo('students')
-
-      loadedStudent = null
       return
     }
 
-    loadDataForStudent(student)
-
-    navigateTo('students', 'student', student._id)
+    navigateTo('student', student._id)
   })
 
   return tr
 }
 
-let loadedStudent = null
+const studentData = {
+  name: 'John Doe',
+  lastUpdate: new Date().toLocaleDateString(),
+  trend: 'Up',
+  data: [
+    Math.random() * 100,
+    Math.random() * 100,
+    Math.random() * 100,
+    Math.random() * 100,
+    Math.random() * 100,
+    Math.random() * 100,
+    Math.random() * 100,
+    Math.random() * 100,
+    Math.random() * 100,
+  ]
+}
 
-function loadDataForStudent(student) {
-  loadedStudent = student._id
+async function loadDataForStudent(studentId) {
+  const student = studentData
   // Here you can fetch data for the selected student and update the radar chart and line chart accordingly
   // Radar Chart Data
   const radarData = {
-    labels: ['Math', 'Science', 'History', 'English', 'Art', 'Music'],
+    labels: ['Operieren und Benennen', 'Erforschen und Argumentieren', 'Mathematisieren und Darstellen',
+      'Operieren und Benennen', 'Erforschen und Argumentieren', 'Mathematisieren und Darstellen',
+      'Operieren und Benennen', 'Erforschen und Argumentieren', 'Mathematisieren und Darstellen'],
     datasets: [{
       label: student.name,
       data: student.data,

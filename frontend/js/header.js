@@ -64,7 +64,7 @@ class Header extends HTMLElement {
 
         .navbar {
           background-color: #fff;
-          color: #fff;
+          color: initial;
           display: flex;
           justify-content: start;
           align-items: center;
