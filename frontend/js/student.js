@@ -35,7 +35,7 @@ window.addEventListener('load', e => {
   showWhile(/\/students\//, document.getElementById('studentTable').parentElement)
   showWhile(/\/upload-overlay\//, document.getElementById('overlay'))
   showWhile(/\/student\//, document.querySelector('.person-details'))
-  showWhile(/\/student\/[^\/]+\/$/, document.querySelector('.person-details>.chart-container'))
+  showWhile(/\/student\/[^\/]+\/$/, document.querySelector('.person-details .chart-container').parentElement)
   showWhile(/\/student\/[^\/]+\/personal-exams\//, document.getElementById('personal-exams'))
   showWhile(/\/student\/[^\/]+\/personal-observations\//, document.getElementById('personal-observations'))
 
@@ -236,7 +236,8 @@ async function loadDataForStudent(studentId) {
           suggestedMin: 0,
           suggestedMax: 100
         }
-      }
+      },
+      
     }
   }
 
