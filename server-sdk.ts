@@ -1,5 +1,5 @@
-import { REST_API, ValidType } from '../api-definition'
-import { checkToken } from '../data-handler'
+import { REST_API, ValidType } from './api-definition'
+import { checkToken } from './data-handler'
 import { IncomingMessage, ServerResponse } from 'http'
 
 type ResponseType = ServerResponse<IncomingMessage> & { req: IncomingMessage }

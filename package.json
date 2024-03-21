@@ -14,7 +14,9 @@
   "dependencies": {
     "@seald-io/nedb": "^4.0.4",
     "mime-types": "^2.1.35",
-    "openai": "^4.29.2"
+    "openai": "^4.29.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
   },
   "devDependencies": {
     "@types/mime-types": "^2.1.4",

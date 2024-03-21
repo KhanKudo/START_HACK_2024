@@ -48,6 +48,27 @@ class API {
     }
 
     /**
+                     * @param {{"token":string}} data
+                     * @returns {Promise<{status:200,ok:true,data:{"accessLevel":number}}|{status:400,ok:false,data:"Provided request data does not match expected request data type."}|{status:401,ok:false,data:"No Token Provided."}|{status:403,ok:false,data:"Provided Token does not have sufficient access rights."}|{status:404,ok:false,data:string}|{status:500,ok:false,data:"An unexpected error has occurred while processing the request."}>}
+                     */
+                    async getTokenAccess(data) {
+            const res = await fetch(`${this._hostname}/api/tokenAccess?json=${JSON.stringify(data)}`, {
+                method: "GET",
+
+                headers: {
+
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
+            })
+
+            return {
+                status: res.status,
+                ok: res.status >= 200 && res.status < 300,
+                data: (res.status === 200)?await res.json():(res.status === 400)?await res.text():(res.status === 401)?await res.text():(res.status === 403)?await res.text():(res.status === 404)?await res.text():(res.status === 500)?await res.text():null
+            }
+        }
+
+/**
                      * @param {undefined=} data
                      * @returns {Promise<{status:200,ok:true,data:({"firstName":string,"lastName":string})[]}|{status:400,ok:false,data:"Provided request data does not match expected request data type."}|{status:401,ok:false,data:"No Token Provided."}|{status:403,ok:false,data:"Provided Token does not have sufficient access rights."}|{status:404,ok:false,data:string}|{status:500,ok:false,data:"An unexpected error has occurred while processing the request."}>}
                      */
@@ -69,15 +90,15 @@ class API {
         }
 
 /**
-                     * @param {{"token":string}} data
-                     * @returns {Promise<{status:200,ok:true,data:{"accessLevel":number}}|{status:400,ok:false,data:"Provided request data does not match expected request data type."}|{status:401,ok:false,data:"No Token Provided."}|{status:403,ok:false,data:"Provided Token does not have sufficient access rights."}|{status:404,ok:false,data:string}|{status:500,ok:false,data:"An unexpected error has occurred while processing the request."}>}
+                     * @param {{"examId":string,"studentId":string}} data
+                     * @returns {Promise<{status:200,ok:true,data:{"studentId":string,"examId":string}}|{status:400,ok:false,data:"Provided request data does not match expected request data type."}|{status:401,ok:false,data:"No Token Provided."}|{status:403,ok:false,data:"Provided Token does not have sufficient access rights."}|{status:404,ok:false,data:"Exam not found!"}|{status:500,ok:false,data:"An unexpected error has occurred while processing the request."}>}
                      */
-                    async getTokenAccess(data) {
-            const res = await fetch(`${this._hostname}/api/tokenAccess?json=${JSON.stringify(data)}`, {
+                    async getExam(data) {
+            const res = await fetch(`${this._hostname}/api/exam?json=${JSON.stringify(data)}`, {
                 method: "GET",
 
                 headers: {
-
+                    "Authorization": `Bearer ${this._token}`,
                     "Content-Type": "application/x-www-form-urlencoded",
                 }
             })
@@ -86,6 +107,69 @@ class API {
                 status: res.status,
                 ok: res.status >= 200 && res.status < 300,
                 data: (res.status === 200)?await res.json():(res.status === 400)?await res.text():(res.status === 401)?await res.text():(res.status === 403)?await res.text():(res.status === 404)?await res.text():(res.status === 500)?await res.text():null
+            }
+        }
+
+/**
+                     * @param {({"examId":string,"studentId":undefined}|{"examId":undefined,"studentId":string})} data
+                     * @returns {Promise<{status:200,ok:true,data:({"studentId":string,"examId":string})[]}|{status:400,ok:false,data:"Provided request data does not match expected request data type."}|{status:401,ok:false,data:"No Token Provided."}|{status:403,ok:false,data:"Provided Token does not have sufficient access rights."}|{status:404,ok:false,data:string}|{status:500,ok:false,data:"An unexpected error has occurred while processing the request."}>}
+                     */
+                    async getExams(data) {
+            const res = await fetch(`${this._hostname}/api/exams?json=${JSON.stringify(data)}`, {
+                method: "GET",
+
+                headers: {
+                    "Authorization": `Bearer ${this._token}`,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
+            })
+
+            return {
+                status: res.status,
+                ok: res.status >= 200 && res.status < 300,
+                data: (res.status === 200)?await res.json():(res.status === 400)?await res.text():(res.status === 401)?await res.text():(res.status === 403)?await res.text():(res.status === 404)?await res.text():(res.status === 500)?await res.text():null
+            }
+        }
+
+/**
+                     * @param {{"examId":string,"studentId":string}} data
+                     * @returns {Promise<{status:200,ok:true,data:string}|{status:400,ok:false,data:"Provided request data does not match expected request data type."}|{status:401,ok:false,data:"No Token Provided."}|{status:403,ok:false,data:"Provided Token does not have sufficient access rights."}|{status:404,ok:false,data:("Exam Entry not found!"|"Exam PDF File not found!")}|{status:500,ok:false,data:"An unexpected error has occurred while processing the request."}>}
+                     */
+                    async getExamPDF(data) {
+            const res = await fetch(`${this._hostname}/api/examPDF?json=${JSON.stringify(data)}`, {
+                method: "GET",
+
+                headers: {
+                    "Authorization": `Bearer ${this._token}`,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
+            })
+
+            return {
+                status: res.status,
+                ok: res.status >= 200 && res.status < 300,
+                data: (res.status === 200)?await res.text():(res.status === 400)?await res.text():(res.status === 401)?await res.text():(res.status === 403)?await res.text():(res.status === 404)?await res.json():(res.status === 500)?await res.text():null
+            }
+        }
+
+/**
+                     * @param {{"studentId":string,"examId":string,"dataURI":(undefined|string)}} data
+                     * @returns {Promise<{status:200,ok:true,data:"Exam successfully added!"}|{status:400,ok:false,data:"Provided request data does not match expected request data type."}|{status:401,ok:false,data:"No Token Provided."}|{status:403,ok:false,data:"Provided Token does not have sufficient access rights."}|{status:404,ok:false,data:string}|{status:409,ok:false,data:"Exam already exists!"}|{status:500,ok:false,data:"An unexpected error has occurred while processing the request."}>}
+                     */
+                    async createExam(data) {
+            const res = await fetch(`${this._hostname}/api/exam`, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Authorization": `Bearer ${this._token}`,
+                    "Content-Type": "application/json",
+                }
+            })
+
+            return {
+                status: res.status,
+                ok: res.status >= 200 && res.status < 300,
+                data: (res.status === 200)?await res.text():(res.status === 400)?await res.text():(res.status === 401)?await res.text():(res.status === 403)?await res.text():(res.status === 404)?await res.text():(res.status === 409)?await res.text():(res.status === 500)?await res.text():null
             }
         }
 }

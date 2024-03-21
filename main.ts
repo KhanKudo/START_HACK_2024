@@ -15,7 +15,9 @@ db.students.findAsync({}).sort({
 const server = new Server(async (req, res) => {
     const url = new URL(req.url ?? '', 'http://localhost:3000')
 
-    if (url.pathname.startsWith('/api')) {
+    if (url.pathname.startsWith('/api/')) {
+        res.req ??= req
+
         return await handler(res, {
             GET: {
                 tokenAccess: async ({ token }, { code200 }) => {
@@ -85,7 +87,7 @@ const server = new Server(async (req, res) => {
     }
 
     if (!url.pathname.includes('..') && !url.pathname.includes('@')) {
-        const filePath = path.join(__dirname, 'frontend', decodeURIComponent(url.pathname))
+        const filePath = path.join(__dirname, 'frontend', /\/[^\/]+\.[^\/]+$/.test(url.pathname) ? decodeURIComponent(url.pathname) : 'index.html')
 
         if (!fs.existsSync(filePath)) {
             res

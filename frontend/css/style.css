@@ -1,0 +1,247 @@
+body {
+    margin: 0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F4F5F7;
+}
+
+.navbar {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    
+}
+
+.table-container {
+    border-radius: 10px; /* Adjust as needed */
+    width: 70%;
+    overflow: hidden; /* Ensure rounded corners are visible */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  #studentTable {
+    width: 100%; /* Ensure table fills its container */
+    border-collapse: collapse;
+  }
+  
+  #studentTable th,
+  #studentTable td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+  }
+  
+td:first-child {
+    user-select: text;
+}
+
+th, td {
+    padding: 20px;
+    text-align: left;
+    cursor: pointer;
+    user-select: none;
+}
+th,tr {
+    background-color: #fff;
+}
+th {
+    color: #A7ABAE;
+}
+tr:hover {
+    background-color: #F4F5F7;
+}
+
+.upload-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #007bff;
+    background-color: transparent;
+    border: 2px solid #007bff;  
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.upload-btn:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  .overlay-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    min-width: 400px;
+    height: 300px;
+  }
+  
+  .overlay-content h2 {
+    margin-top: 0;
+    display: inline-block;
+    margin-right: 50%;
+  }
+
+  #closeOverlay {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Reset default styles */
+input[type="text"] {
+    appearance: none;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #444444; /* Border color */
+    transition: border-color 0.3s;
+    margin: 10px;
+  }
+  
+  /* Placeholder style */
+  input[type="text"]::placeholder {
+    color: #999; /* Placeholder text color */
+  }
+  
+  /* Hover effect */
+  input[type="text"]:hover {
+    border-color: #33333365; /* Border color on hover */
+  }
+  
+  /* Focus effect */
+  input[type="text"]:focus {
+    border-color: #333; /* Border color on focus */
+  }
+  
+  /* Reset default styles */
+button[type="submit"] {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #007bff;
+    background-color: transparent;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 10px;
+  }
+  
+  /* Hover effect */
+  button[type="submit"]:hover {
+    background-color: #007bff;
+    color: #fff; /* Button background color on hover */
+  }
+  
+
+  .drop-area {
+    border: 2px dashed #007bff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    margin: 10px;
+  }
+  
+  .drop-area svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .drop-area span {
+    color: #007bff;
+  }
+  
+
+.person-details {
+    display: none;
+}
+
+.chart-container {
+    
+    display: flex;
+}
+
+.person-details.active {
+    display: block;
+}
+
+.chart {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    flex: 1; /* Make charts grow to fill remaining space */
+    min-width: 500px;
+    min-height: 500px;
+}
+
+.chart h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+#radarChart {
+    width: 100%; /* Make radar chart fill its container */
+    aspect-ratio: 1; /* Ensure radar chart is square */
+}
+
+#lineChart {
+    width: 100%; /* Make line chart fill its container */
+    height: 100%; /* Make line chart fill its container height */
+}
+
+.input-container {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  input[type="text"] {
+    width: 70vw;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  input[type="text"]::placeholder {
+    color: #999; /* Placeholder text color */
+  }
+  
+  input[type="text"]:focus {
+    border-color: #007bff; /* Border color on focus */
+    outline: none;
+  }
+  
