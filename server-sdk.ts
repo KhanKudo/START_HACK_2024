@@ -99,6 +99,27 @@ code404:function (res:ResponseType, data:("Exam Entry not found!"|"Exam PDF File
                     "Access-Control-Allow-Origin": "*"
                 })
                     .end(typeof data === "object" ? JSON.stringify(data) : data);
+            }}},
+"observations":{
+req:{"studentId":String},
+res:{"200":[{"studentId":String,"observation":String,"date":String}],"404":"Student not found!"},
+accessLevel:1000,
+keepAliveSSE:false,
+handlers:{code200:function (res:ResponseType, data:({"studentId":string,"observation":string,"date":string})[]) {
+                res
+                    .writeHead(200, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            },
+code404:function (res:ResponseType, data:"Student not found!"="Student not found!") {
+                res
+                    .writeHead(404, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
             }}}},
 "POST":{"exam":{
 req:{"studentId":String,"examId":String,"dataURI":[undefined,String]},
@@ -116,6 +137,19 @@ handlers:{code200:function (res:ResponseType, data:"Exam successfully added!"="E
 code409:function (res:ResponseType, data:"Exam already exists!"="Exam already exists!") {
                 res
                     .writeHead(409, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            }}},
+"observation":{
+req:{"studentId":String,"observation":String},
+res:{"200":"Observation successfully added!"},
+accessLevel:5000,
+keepAliveSSE:false,
+handlers:{code200:function (res:ResponseType, data:"Observation successfully added!"="Observation successfully added!") {
+                res
+                    .writeHead(200, {
                     'Content-Type': 'text/plain',
                     "Access-Control-Allow-Origin": "*"
                 })
@@ -229,10 +263,15 @@ code404:(data?:"Exam not found!")=>void})=>void|Promise<void>,
 code200:(data:({"studentId":string,"examId":string})[])=>void})=>void|Promise<void>,
 "examPDF":(data:{"examId":string,"studentId":string},res:{
 code200:(data:string)=>void,
-code404:(data:("Exam Entry not found!"|"Exam PDF File not found!"))=>void})=>void|Promise<void>},
+code404:(data:("Exam Entry not found!"|"Exam PDF File not found!"))=>void})=>void|Promise<void>,
+"observations":(data:{"studentId":string},res:{
+code200:(data:({"studentId":string,"observation":string,"date":string})[])=>void,
+code404:(data?:"Student not found!")=>void})=>void|Promise<void>},
 "POST":{"exam":(data:{"studentId":string,"examId":string,"dataURI":(undefined|string)},res:{
 code200:(data?:"Exam successfully added!")=>void,
-code409:(data?:"Exam already exists!")=>void})=>void|Promise<void>} }): Promise<void> {
+code409:(data?:"Exam already exists!")=>void})=>void|Promise<void>,
+"observation":(data:{"studentId":string,"observation":string},res:{
+code200:(data?:"Observation successfully added!")=>void})=>void|Promise<void>} }): Promise<void> {
     const request = response.req
     if (!request.url || !request.method || !request.headers) {
         response

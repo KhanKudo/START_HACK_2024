@@ -97,6 +97,12 @@ const server = new Server(async (req, res) => {
                     const uri = 'data:' + mime + ';' + encoding + ',' + data
 
                     return code200(uri)
+                },
+                observations: async ({ studentId }, { code200, code404 }) => {
+                    if (!db.students.findOneAsync({ studentId }))
+                        return code404()
+
+                    return code200(await db.observations.findAsync({ studentId }))
                 }
             },
             POST: {
@@ -119,6 +125,11 @@ const server = new Server(async (req, res) => {
                         })
                         fs.writeFileSync(filePath, buf)
                     }
+
+                    return code200()
+                },
+                observation: async ({ studentId, observation }, { code200 }) => {
+                    await db.observations.insertAsync({ studentId, observation, date: new Date().toISOString() })
 
                     return code200()
                 }
