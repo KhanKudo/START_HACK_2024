@@ -87,6 +87,11 @@ submit.addEventListener('click', async () => {
   })
 
   if (!res.ok) {
+    if (res.status === 409) {
+      alert('Exam already exists')
+      return
+    }
+
     alert('Error uploading exam')
     return
   }

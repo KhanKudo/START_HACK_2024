@@ -1,5 +1,8 @@
 api.setToken("admin")
 
+if (window.location.search === '')
+  navigateTo('students')
+
 api.getStudents().then(({ data, ok }) => {
   if (!ok)
     return console.error(data)
@@ -31,6 +34,9 @@ window.addEventListener('load', e => {
   showWhile(/\/students\//, document.getElementById('studentTable').parentElement)
   showWhile(/\/upload-overlay\//, document.getElementById('overlay'))
   showWhile(/\/student\//, document.querySelector('.person-details'))
+  showWhile(/\/student\/[^\/]+\/$/, document.querySelector('.person-details>.chart-container'))
+  showWhile(/\/student\/[^\/]+\/personal-exams\//, document.getElementById('personal-exams'))
+  showWhile(/\/student\/[^\/]+\/personal-observations\//, document.getElementById('personal-observations'))
 
   document.getElementById('closeOverlay').addEventListener('click', () => {
     subNavigate(2)
@@ -46,6 +52,38 @@ window.addEventListener('load', e => {
   onNavTo(/\/student\/([^\/]+)\//, match => {
     const studentId = match[1]
     loadDataForStudent(studentId)
+  })
+
+  document.getElementById('personal-exams-button').addEventListener('click', () => {
+    if (/\/student\/[^\/]+\/personal-/.test(window.location.search))
+      setNav('personal-exams')
+    else
+      addNavigate('personal-exams')
+  })
+
+  onNavTo(/\/student\/([^\/]+)\/personal-exams\//, match => {
+    api.getExams({ studentId: match[1] }).then(({ data, ok, status }) => {
+      if (!ok)
+        return console.error(status, data)
+
+      data.forEach(exam => {
+        const div = document.createElement('div')
+        div.innerText = exam.examId
+
+        div.addEventListener('click', () => {
+          window.open('/exams/' + exam.examId + '/' + exam.studentId + '.pdf', '_blank')
+        })
+
+        document.getElementById('personal-exams').append(div)
+      })
+    })
+  })
+
+  document.getElementById('personal-observations-button').addEventListener('click', () => {
+    if (/\/student\/[^\/]+\/personal-/.test(window.location.search))
+      setNav('personal-observations')
+    else
+      addNavigate('personal-observations')
   })
 })
 

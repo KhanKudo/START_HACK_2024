@@ -19,6 +19,37 @@ db.exams.findAsync({}).then(console.log)
 const server = new Server(async (req, res) => {
     const url = new URL(req.url ?? '', 'http://localhost:3000')
 
+    if (url.pathname.startsWith('/exams/')) {
+        const filePath = path.join(__dirname, 'database', decodeURIComponent(url.pathname))
+
+        if (!fs.existsSync(filePath)) {
+            res
+                .writeHead(404, {
+                    'Content-Type': 'text/plain'
+                })
+                .end('Requested file was not found!')
+        }
+        else {
+            fs.readFile(filePath, (err, data) => {
+                if (!err) {
+                    res
+                        .writeHead(200, {
+                            'Content-Type': mime.lookup(filePath) || 'text/plain'
+                        })
+                        .end(data)
+                }
+                else {
+                    res
+                        .writeHead(500, {
+                            'Content-Type': 'text/plain'
+                        })
+                        .end('Failed to read requested file')
+                }
+            })
+        }
+        return
+    }
+
     if (url.pathname.startsWith('/api/')) {
         res.req ??= req
 
@@ -43,7 +74,10 @@ const server = new Server(async (req, res) => {
                     return code200(exam)
                 },
                 exams: async ({ examId, studentId }, { code200 }) => {
-                    return code200(await db.exams.findAsync({ examId, studentId }))
+                    if (examId)
+                        return code200(await db.exams.findAsync({ examId }))
+                    if (studentId)
+                        return code200(await db.exams.findAsync({ studentId }))
                 },
                 examPDF: async ({ examId, studentId }, { code200, code404 }) => {
                     const exam = await db.exams.findOneAsync({ examId, studentId })
@@ -57,7 +91,9 @@ const server = new Server(async (req, res) => {
                     if (!fs.existsSync(filePath))
                         return code404('Exam PDF File not found!')
 
-                    const data = fs.readFileSync(filePath).toString(encoding)
+                    const data = fs.readFileSync(filePath, {
+                        encoding: 'base64'
+                    })
                     const uri = 'data:' + mime + ';' + encoding + ',' + data
 
                     return code200(uri)

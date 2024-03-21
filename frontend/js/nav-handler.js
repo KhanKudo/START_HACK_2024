@@ -34,7 +34,7 @@ function navigateTo(...path) {
  * @param  {string} path sets latest path to given value, same as sub -1 then add
  */
 function setNav(path) {
-    navigateTo(getSplitPath().slice(0, -1), path)
+    navigateTo(...getSplitPath().slice(0, -1), path)
 }
 
 /**

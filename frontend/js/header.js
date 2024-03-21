@@ -71,6 +71,7 @@ class Header extends HTMLElement {
           gap: 35%;
           padding: 10px 20px;
           z-index: 999999;
+          height: 60px;
       }
 
       .header-scrolled {
