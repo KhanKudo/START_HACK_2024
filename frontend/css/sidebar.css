@@ -15,6 +15,7 @@
   align-items: center;
   padding: 10px;
   cursor: pointer;
+  border-radius: 10px;
 }
 
 .side-bar div:hover {
@@ -31,11 +32,8 @@
   font-size: 16px;
 }
 
-/* .side-bar>div.active {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-.side-bar svg {
-  filter: saturate(0) brightness(10%);
-} */
+.side-bar > div.active {
+    background-color: #F4F5F7;
+  }
+  
+  
