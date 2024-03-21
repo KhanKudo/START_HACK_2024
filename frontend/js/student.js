@@ -39,6 +39,11 @@ window.addEventListener('load', e => {
 	showWhile(/\/student\/[^\/]+\/personal-exams\//, document.getElementById('personal-exams'))
 	showWhile(/\/student\/[^\/]+\/personal-observations\//, document.getElementById('personal-observations'))
 
+	document.getElementById('personal-student-button').addEventListener('click', () => {
+		if (/\/student\/[^\/]+\/personal-/.test(window.location.search))
+			subNavigate(1)
+	})
+
 	document.getElementById('observationsInput').addEventListener('change', (e) => {
 		const text = e.target.value
 
@@ -60,6 +65,12 @@ window.addEventListener('load', e => {
 	onNavTo(/\/student\/([^\/]+)\//, match => {
 		const studentId = match[1]
 		loadDataForStudent(studentId)
+
+		if (/\/student\/[^\/]+\/personal-/.test(window.location.search))
+			return
+
+		document.querySelectorAll('.side-bar>div').forEach(div => div.classList.remove('active'))
+		document.getElementById('personal-student-button').classList.add('active')
 	})
 
 	document.getElementById('personal-exams-button').addEventListener('click', () => {
@@ -70,11 +81,14 @@ window.addEventListener('load', e => {
 	})
 
 	onNavTo(/\/student\/([^\/]+)\/personal-exams\//, match => {
+		document.querySelectorAll('.side-bar>div').forEach(div => div.classList.remove('active'))
+		document.getElementById('personal-exams-button').classList.add('active')
+
 		api.getExams({ studentId: match[1] }).then(({ data, ok, status }) => {
 			if (!ok)
 				return console.error(status, data)
 
-			data.forEach(exam => {
+			document.getElementById('personal-exams').replaceChildren(...data.map(exam => {
 				const div = document.createElement('div')
 				div.innerText = exam.examId
 
@@ -82,8 +96,8 @@ window.addEventListener('load', e => {
 					window.open('/exams/' + exam.examId + '/' + exam.studentId + '.pdf', '_blank')
 				})
 
-				document.getElementById('personal-exams').append(div)
-			})
+				return div
+			}))
 		})
 	})
 
@@ -95,13 +109,14 @@ window.addEventListener('load', e => {
 	})
 
 	onNavTo(/\/student\/([^\/]+)\/personal-observations\//, match => {
+		document.querySelectorAll('.side-bar>div').forEach(div => div.classList.remove('active'))
+		document.getElementById('personal-observations-button').classList.add('active')
+
 		api.getObservations({ studentId: match[1] }).then(({ data, ok, status }) => {
 			if (!ok)
 				return console.error(status, data)
 
-			document.getElementById('personal-observations').innerHTML = ''
-
-			document.getElementById('personal-observations').append(...data.map(data => {
+			document.getElementById('personal-observations').replaceChildren(...data.map(data => {
 				const div = document.createElement('div')
 				div.innerText = data.observation + ' - ' + new Date(data.date).toLocaleString()
 				return div
@@ -189,6 +204,9 @@ async function loadDataForStudent(studentId) {
 			// document.querySelector('#examTable tbody').append(createExamRow(exam))
 		})
 	})
+
+	document.querySelector('#personal-student-button>span').innerText = student.name
+
 	// Here you can fetch data for the selected student and update the radar chart and line chart accordingly
 	// Radar Chart Data
 	const radarDataMath = {
