@@ -21,10 +21,10 @@ export const Exam = {
 
 export type ExamType = ConvertToJSDocType<typeof Exam>
 
-export const Note = {
+export const Observation = {
     studentId: String,
-    noteId: String,
+    observation: String,
     date: String,
 }
 
-export type NoteType = ConvertToJSDocType<typeof Note>
+export type ObservationType = ConvertToJSDocType<typeof Observation>
