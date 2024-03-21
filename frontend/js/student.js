@@ -189,8 +189,8 @@ async function loadDataForStudent(studentId) {
     datasets: [{
       label: student.name,
       data: student.data,
-      backgroundColor: 'rgba(54, 162, 235, 0.2)',
-      borderColor: 'rgba(54, 162, 235, 1)',
+      backgroundColor: 'rgba(106, 90, 205, 0.2)',
+      borderColor: 'rgba(106, 90, 205, 1)',
       borderWidth: 1
     }]
   }
