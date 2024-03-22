@@ -17,9 +17,29 @@ export type TokenType = ConvertToJSDocType<typeof Token>
 export const Exam = {
     studentId: String,
     examId: String,
+    date: String,
 }
 
 export type ExamType = ConvertToJSDocType<typeof Exam>
+
+export const Competency = {
+    examId: String,
+    studentId: String,
+    main: String,
+    sub: String,
+    grade: Number,
+}
+
+export type CompetencyType = ConvertToJSDocType<typeof Competency>
+
+export const Discipline = {
+    studentId: String,
+    date: String,
+    discipline: String,
+    grade: Number,
+}
+
+export type DisciplineType = ConvertToJSDocType<typeof Discipline>
 
 export const Observation = {
     studentId: String,

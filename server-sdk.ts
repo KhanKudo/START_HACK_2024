@@ -47,10 +47,10 @@ handlers:{code200:function (res:ResponseType, data:({"firstName":string,"lastNam
             }}},
 "exam":{
 req:{"examId":String,"studentId":String},
-res:{"200":{"studentId":String,"examId":String},"404":"Exam not found!"},
+res:{"200":{"studentId":String,"examId":String,"date":String},"404":"Exam not found!"},
 accessLevel:1000,
 keepAliveSSE:false,
-handlers:{code200:function (res:ResponseType, data:{"studentId":string,"examId":string}) {
+handlers:{code200:function (res:ResponseType, data:{"studentId":string,"examId":string,"date":string}) {
                 res
                     .writeHead(200, {
                     'Content-Type': 'text/plain',
@@ -68,10 +68,10 @@ code404:function (res:ResponseType, data:"Exam not found!"="Exam not found!") {
             }}},
 "exams":{
 req:[{"examId":String,"studentId":undefined},{"examId":undefined,"studentId":String}],
-res:{"200":[{"studentId":String,"examId":String}]},
+res:{"200":[{"studentId":String,"examId":String,"date":String}]},
 accessLevel:1000,
 keepAliveSSE:false,
-handlers:{code200:function (res:ResponseType, data:({"studentId":string,"examId":string})[]) {
+handlers:{code200:function (res:ResponseType, data:({"studentId":string,"examId":string,"date":string})[]) {
                 res
                     .writeHead(200, {
                     'Content-Type': 'text/plain',
@@ -120,9 +120,35 @@ code404:function (res:ResponseType, data:"Student not found!"="Student not found
                     "Access-Control-Allow-Origin": "*"
                 })
                     .end(typeof data === "object" ? JSON.stringify(data) : data);
+            }}},
+"competencies":{
+req:{"studentId":String,"examId":[undefined,String]},
+res:{"200":[{"examId":String,"studentId":String,"main":String,"sub":String,"grade":Number}]},
+accessLevel:1000,
+keepAliveSSE:false,
+handlers:{code200:function (res:ResponseType, data:({"examId":string,"studentId":string,"main":string,"sub":string,"grade":number})[]) {
+                res
+                    .writeHead(200, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
+            }}},
+"disciplines":{
+req:{"studentId":String},
+res:{"200":[{"studentId":String,"date":String,"discipline":String,"grade":Number}]},
+accessLevel:1000,
+keepAliveSSE:false,
+handlers:{code200:function (res:ResponseType, data:({"studentId":string,"date":string,"discipline":string,"grade":number})[]) {
+                res
+                    .writeHead(200, {
+                    'Content-Type': 'text/plain',
+                    "Access-Control-Allow-Origin": "*"
+                })
+                    .end(typeof data === "object" ? JSON.stringify(data) : data);
             }}}},
 "POST":{"exam":{
-req:{"studentId":String,"examId":String,"dataURI":[undefined,String]},
+req:{"studentId":String,"examId":String,"date":String,"dataURI":String},
 res:{"200":"Exam successfully added!","409":"Exam already exists!"},
 accessLevel:5000,
 keepAliveSSE:false,
@@ -257,17 +283,21 @@ code200:(data:{"accessLevel":number})=>void})=>void|Promise<void>,
 "students":(data:undefined,res:{
 code200:(data:({"firstName":string,"lastName":string})[])=>void})=>void|Promise<void>,
 "exam":(data:{"examId":string,"studentId":string},res:{
-code200:(data:{"studentId":string,"examId":string})=>void,
+code200:(data:{"studentId":string,"examId":string,"date":string})=>void,
 code404:(data?:"Exam not found!")=>void})=>void|Promise<void>,
 "exams":(data:({"examId":string,"studentId":undefined}|{"examId":undefined,"studentId":string}),res:{
-code200:(data:({"studentId":string,"examId":string})[])=>void})=>void|Promise<void>,
+code200:(data:({"studentId":string,"examId":string,"date":string})[])=>void})=>void|Promise<void>,
 "examPDF":(data:{"examId":string,"studentId":string},res:{
 code200:(data:string)=>void,
 code404:(data:("Exam Entry not found!"|"Exam PDF File not found!"))=>void})=>void|Promise<void>,
 "observations":(data:{"studentId":string},res:{
 code200:(data:({"studentId":string,"observation":string,"date":string})[])=>void,
-code404:(data?:"Student not found!")=>void})=>void|Promise<void>},
-"POST":{"exam":(data:{"studentId":string,"examId":string,"dataURI":(undefined|string)},res:{
+code404:(data?:"Student not found!")=>void})=>void|Promise<void>,
+"competencies":(data:{"studentId":string,"examId":(undefined|string)},res:{
+code200:(data:({"examId":string,"studentId":string,"main":string,"sub":string,"grade":number})[])=>void})=>void|Promise<void>,
+"disciplines":(data:{"studentId":string},res:{
+code200:(data:({"studentId":string,"date":string,"discipline":string,"grade":number})[])=>void})=>void|Promise<void>},
+"POST":{"exam":(data:{"studentId":string,"examId":string,"date":string,"dataURI":string},res:{
 code200:(data?:"Exam successfully added!")=>void,
 code409:(data?:"Exam already exists!")=>void})=>void|Promise<void>,
 "observation":(data:{"studentId":string,"observation":string},res:{

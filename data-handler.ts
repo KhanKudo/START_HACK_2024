@@ -1,5 +1,5 @@
 import Datastore from '@seald-io/nedb'
-import { ExamType, ObservationType, StudentType, TokenType } from './models'
+import { CompetencyType, DisciplineType, ExamType, ObservationType, StudentType, TokenType } from './models'
 
 const tokens = new Datastore<TokenType>({
     filename: 'database/tokens.db',
@@ -16,6 +16,16 @@ const exams = new Datastore<ExamType>({
     autoload: true
 })
 
+const competencies = new Datastore<CompetencyType>({
+    filename: 'database/competencies.db',
+    autoload: true
+})
+
+const disciplines = new Datastore<DisciplineType>({
+    filename: 'database/disciplines.db',
+    autoload: true
+})
+
 const observations = new Datastore<ObservationType>({
     filename: 'database/observations.db',
     autoload: true
@@ -24,6 +34,8 @@ const observations = new Datastore<ObservationType>({
 export const db = {
     students,
     exams,
+    competencies,
+    disciplines,
     observations
 }
 

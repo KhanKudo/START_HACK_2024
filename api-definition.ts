@@ -1,5 +1,5 @@
 import { ConvertToRuntimeType } from './ConstructorTypeMap'
-import { Exam, ExamType, Observation, Student, Token } from './models'
+import { Competency, Discipline, Exam, ExamType, Observation, Student, Token } from './models'
 
 export declare type MethodType = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
@@ -124,13 +124,30 @@ export const REST_API: ApiType = {
                 200: [Observation],
                 404: 'Student not found!'
             }
-        }
+        },
+        competencies: {
+            req: {
+                studentId: String,
+                examId: [null, String]
+            },
+            res: {
+                200: [Competency]
+            }
+        },
+        disciplines: {
+            req: {
+                studentId: String,
+            },
+            res: {
+                200: [Discipline]
+            }
+        },
     },
     POST: {
         exam: {
             req: {
                 ...Exam,
-                dataURI: [null, String],
+                dataURI: String,
             },
             res: {
                 200: 'Exam successfully added!',
