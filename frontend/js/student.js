@@ -372,17 +372,19 @@ async function loadDataForStudent(studentId) {
 
 	// Line Chart Configuration
 	const lineConfig = {
-		type: 'line',
-		data: lineData,
-		options: {
-			scales: {
-				y: {
-					beginAtZero: false,
-					maintainAspectRatio: false
-				}
-			}
-		}
-	}
+    type: 'line',
+    data: lineData,
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+              display: false
+          }
+      }]
+      }
+    }
+  };
+  
 
 	// Create Radar Chart
 	const radarChartCtx = document.getElementById('radarChartMath').getContext('2d')
