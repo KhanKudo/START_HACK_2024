@@ -2,9 +2,10 @@ import { Server } from 'http'
 import path from 'path'
 import * as fs from 'fs'
 import * as mime from 'mime-types'
-import { askChatGPT } from './chatgpt'
+import { chatGPTGradeObservation } from './chatgpt'
 import { db, getTokenAccess } from './data-handler'
 import { handler } from './server-sdk'
+import { spawnSync } from 'child_process'
 
 // db.exams.removeAsync({}, { multi: true }).then(console.log)
 
@@ -105,6 +106,15 @@ const server = new Server(async (req, res) => {
                     return code200(await db.observations.findAsync({ studentId }).sort({
                         date: -1
                     }))
+                },
+                competencies: async ({ examId, studentId }, { code200 }) => {
+                    if (examId)
+                        return code200(await db.competencies.findAsync({ examId, studentId }))
+                    else
+                        return code200(await db.competencies.findAsync({ studentId }))
+                },
+                disciplines: async ({ studentId }, { code200 }) => {
+                    return code200(await db.disciplines.findAsync({ studentId }))
                 }
             },
             POST: {
@@ -118,20 +128,60 @@ const server = new Server(async (req, res) => {
                     if (fs.existsSync(filePath))
                         return code409()
 
-                    await db.exams.insertAsync({ examId, studentId })
+                    const buf = Buffer.from(dataURI, 'binary')
+                    fs.mkdirSync(path.join(filePath, '../'), {
+                        recursive: true
+                    })
+                    fs.writeFileSync(filePath, buf)
 
-                    if (dataURI) {
-                        const buf = Buffer.from(dataURI, 'binary')
-                        fs.mkdirSync(path.join(filePath, '../'), {
-                            recursive: true
+                    let pythonProcess
+                    try {
+                        pythonProcess = spawnSync('C:\\Python312\\python.exe', [path.join(__dirname, 'LLM', 'LLMVerarbeitungMultiTest.py')], {
+                            cwd: path.join(__dirname, 'LLM'),
                         })
-                        fs.writeFileSync(filePath, buf)
+                    } catch (error) {
+                        return console.log('Python process failed')
+                    }
+
+                    const parsed: { "main-competency": string; "sub-competency": string; "grade": string }[] = JSON.parse('[' + pythonProcess.stdout.toString().replace(/\}\r?\n\{/g, '},\n{').replace(/\r?\n/g, '') + ']')
+
+                    const date = new Date().toISOString()
+
+                    await db.exams.insertAsync({ examId, studentId, date })
+
+                    for (const obj of parsed) {
+                        await db.competencies.insertAsync({
+                            examId,
+                            studentId,
+                            main: obj["main-competency"],
+                            sub: obj["sub-competency"],
+                            grade: parseInt(obj["grade"]),
+                        })
                     }
 
                     return code200()
                 },
                 observation: async ({ studentId, observation }, { code200 }) => {
-                    await db.observations.insertAsync({ studentId, observation, date: new Date().toISOString() })
+                    const date = new Date().toISOString()
+                    await db.observations.insertAsync({ studentId, observation, date })
+
+                    await db.disciplines.insertAsync({
+                        date,
+                        studentId,
+                        discipline: 'Aufpassen',
+                        grade: Math.round(Math.random() * 100),
+                    })
+
+                    // chatGPTGradeObservation()
+
+                    // for (const obj of parsed) {
+                    //     await db.disciplines.insertAsync({
+                    //         date,
+                    //         studentId,
+                    //         discipline: obj["discipline"],
+                    //         grade: parseInt(obj["grade"]),
+                    //     })
+                    // }
 
                     return code200()
                 }
@@ -178,5 +228,42 @@ const server = new Server(async (req, res) => {
 })
 
 server.listen(3000, () => {
+    test()
     console.log('Server is running')
 })
+
+async function test(examId = '1', studentId = 'XIaZK6S7XRab6Kfw') {
+    console.log('test function')
+    let pythonProcess
+    try {
+        pythonProcess = spawnSync('C:\\Python312\\python.exe', [path.join(__dirname, 'LLM', 'LLMVerarbeitungMultiTest.py')], {
+            cwd: path.join(__dirname, 'LLM'),
+        })
+    } catch (error) {
+        return console.log('Python process failed')
+    }
+
+    // console.log('[' + pythonProcess.stdout.toString().replace(/\}\r?\n\{/g, '},\n{').replace(/\r?\n/g, '') + ']')
+    const parsed: { "main-competency": string; "sub-competency": string; "grade": string }[] = JSON.parse('[' + pythonProcess.stdout.toString().replace(/\}\r?\n\{/g, '},\n{').replace(/\r?\n/g, '') + ']')
+    console.log(parsed)
+    // console.log('ERR:')
+    // console.log(pythonProcess.stderr.toString())
+
+    if (pythonProcess.signal) {
+        throw new Error(`Python process was killed by signal: ${pythonProcess.signal}`)
+    }
+
+    const date = new Date().toISOString()
+
+    await db.exams.insertAsync({ examId, studentId, date })
+
+    for (const obj of parsed) {
+        await db.competencies.insertAsync({
+            examId,
+            studentId,
+            main: obj["main-competency"],
+            sub: obj["sub-competency"],
+            grade: parseInt(obj["grade"]),
+        })
+    }
+}

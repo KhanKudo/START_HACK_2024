@@ -3,15 +3,23 @@ api.setToken("admin")
 if (window.location.search === '')
 	navigateTo('students')
 
+let students = []
+
+function getStudent(studentId) {
+	return students.find(student => student._id === studentId)
+}
+
 api.getStudents().then(({ data, ok }) => {
 	if (!ok)
 		return console.error(data)
+
+	students = data
 
 	data.forEach(student => {
 		document.querySelector('#studentTable tbody').append(createStudentRow(
 			{
 				_id: student._id,
-				name: student.lastName + ' ' + student.firstName,
+				name: `${student.lastName} ${student.firstName}`,
 				lastUpdate: new Date().toLocaleDateString(),
 				trend: 'Up',
 				data: [
@@ -193,70 +201,89 @@ function drawMiniChart(canvas, data) {
 	ctx.stroke()
 }
 
-const studentData = {
-	name: 'John Doe',
-	lastUpdate: new Date().toLocaleDateString(),
-	trend: 'Up',
-	data: [
-		Math.random() * 100,
-		Math.random() * 100,
-		Math.random() * 100,
-		Math.random() * 100,
-		Math.random() * 100,
-		Math.random() * 100,
-		Math.random() * 100,
-		Math.random() * 100,
-		Math.random() * 100,
-	]
-}
-
 async function loadDataForStudent(studentId) {
-	const student = studentData
+	const student = getStudent(studentId)
+	class Avg {
+		count = 0
+		sum = 0
+		add(val) {
+			this.count++
+			this.sum += val
+		}
 
-	api.getExams({ studentId }).then(({ data, ok, status }) => {
+		avg() {
+			return this.sum / this.count
+		}
+	}
+
+	const comps = {}
+
+	await api.getCompetencies({ studentId }).then(({ data, ok, status }) => {
 		if (!ok)
 			return console.error(status, data)
 
-		data.forEach(exam => {
-			// document.querySelector('#examTable tbody').append(createExamRow(exam))
+		data.forEach(comp => {
+			comps[comp.sub] ??= new Avg()
+			comps[comp.sub].add(comp.grade)
 		})
 	})
 
-	document.querySelector('#personal-student-button>span').innerText = student.name
+	const discs = {}
+
+	await api.getDisciplines({ studentId }).then(({ data, ok, status }) => {
+		if (!ok)
+			return console.error(status, data)
+
+		data.forEach(disc => {
+			discs[disc.discipline] ??= new Avg()
+			discs[disc.discipline].add(disc.grade)
+		})
+	})
+
+	// api.getExams({ studentId }).then(({ data, ok, status }) => {
+	// 	if (!ok)
+	// 		return console.error(status, data)
+
+	// 	data.forEach(exam => {
+	// 		// document.querySelector('#examTable tbody').append(createExamRow(exam))
+	// 	})
+	// })
+
+	document.querySelector('#personal-student-button>span').innerText = `${student.lastName} ${student.firstName}`
+
+	// const resComps = Object.entries(comps).map(([comp, avg]) => {
+	// 	return { comp, grade: avg.avg() }
+	// })
 
 	// Here you can fetch data for the selected student and update the radar chart and line chart accordingly
 	// Radar Chart Data
 	const radarDataMath = {
-		labels: ['1 | Operieren und Benennen', '1 | Erforschen und Argumentieren', '1 | Mathematisieren und Darstellen',
-			'2 | Operieren und Benennen', '2 | Erforschen und Argumentieren', '2 | Mathematisieren und Darstellen',
-			'3 | Operieren und Benennen', '3 | Erforschen und Argumentieren', '3 | Mathematisieren und Darstellen'],
+		labels: Object.keys(comps),
 		datasets: [{
-			label: student.name,
-			data: student.data,
+			label: `${student.lastName} ${student.firstName}`,
+			data: Object.values(comps).map(x => Math.round(x.avg())),
 			backgroundColor: 'rgba(54, 162, 235, 0.2)',
 			borderColor: 'rgba(54, 162, 235, 1)',
 			borderWidth: 1
 		}]
 	}
-  const radarDataGer = {
+	const radarDataGer = {
 		labels: ['1 | Operieren und Benennen', '1 | Erforschen und Argumentieren', '1 | Mathematisieren und Darstellen',
 			'2 | Operieren und Benennen', '2 | Erforschen und Argumentieren', '2 | Mathematisieren und Darstellen',
 			'3 | Operieren und Benennen', '3 | Erforschen und Argumentieren', '3 | Mathematisieren und Darstellen'],
 		datasets: [{
-			label: student.name,
-			data: student.data,
+			label: `${student.lastName} ${student.firstName}`,
+			data: [10,20,30,40,50,60,70,80,90],
 			backgroundColor: 'rgba(106, 90, 205, 0.2)',
 			borderColor: 'rgba(106, 90, 205, 1)',
 			borderWidth: 1
 		}]
 	}
 	const polarDataInt = {
-		labels: ['Selbstreflexion', 'Dialog- und Kooperationsf\u00e4higkeit', 'Sprachf\u00e4higkeit',
-			'Aufgaben/Probleme l\u00f6sen', 'Selbstst\u00e4ndigkeit', 'Eigenst\u00e4ndigkeit',
-			'Konfliktf\u00e4higkeit', 'Informationen nutzen', 'Umgang mit Vielfalt'],
+		labels: Object.keys(discs),
 		datasets: [{
-			label: student.name,
-			data: student.data,
+			label: `${student.lastName} ${student.firstName}`,
+			data: Object.values(discs).map(x => Math.round(x.avg())),
 			backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)',
 				'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)',
 				'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
@@ -296,7 +323,7 @@ async function loadDataForStudent(studentId) {
 		}
 	}
 
-  const radarConfigGer = {
+	const radarConfigGer = {
 		type: 'radar',
 		data: radarDataGer,
 		options: {
@@ -363,7 +390,7 @@ async function loadDataForStudent(studentId) {
 	const radarChartCtx = document.getElementById('radarChartMath').getContext('2d')
 	const radarChart = new Chart(radarChartCtx, radarConfigMath)
 
-  const radarChartCtx2 = document.getElementById('radarChartGer').getContext('2d')
+	const radarChartCtx2 = document.getElementById('radarChartGer').getContext('2d')
 	const radarChart2 = new Chart(radarChartCtx2, radarConfigGer)
 
 	const polarChartCtx2 = document.getElementById('radarChartInt').getContext('2d')
